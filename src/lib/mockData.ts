@@ -2,6 +2,8 @@ import type { Survey } from '../types'
 
 const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Partecipando a questa ricerca accetti che i tuoi dati vengano utilizzati in forma anonima per scopi scientifici. Le tue risposte saranno trattate con la massima riservatezza.'
 
+const R2_BASE = 'https://pub-69c2fe31a3bd4ec98bd6fe04be7f4d13.r2.dev'
+
 const videoFiles = [
   '10_cloverfield_lane',
   '500_days_of_summer',
@@ -83,7 +85,7 @@ export const MOCK_SURVEY: Survey = {
   ],
   videos: videoFiles.map((name) => ({
     id: name,
-    storage_url: `/videos/${name}.mp4`,
+    storage_url: `${R2_BASE}/${name}.mp4`,
     title: name.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
     questions: makeQuestions(name),
   })),
