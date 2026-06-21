@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchSurveyForAdmin, saveSurvey, signOut } from '../../lib/db'
-import { MOCK_SURVEY } from '../../lib/mockData'
+import { fetchSurveyForAdmin, fetchFirstSurveyId, saveSurvey, signOut } from '../../lib/db'
 import type { Survey, Question } from '../../types'
 
 export function EditorPage() {
@@ -11,11 +10,9 @@ export function EditorPage() {
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
 
-  const surveyId = MOCK_SURVEY.id
-
   useEffect(() => {
-    void fetchSurveyForAdmin(surveyId).then((s) => setSurvey(s))
-  }, [surveyId])
+    void fetchFirstSurveyId().then((id) => fetchSurveyForAdmin(id)).then((s) => setSurvey(s))
+  }, [])
 
   if (!survey) {
     return (

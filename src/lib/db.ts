@@ -131,14 +131,20 @@ export async function fetchSurveyForAdmin(id: string): Promise<Survey | null> {
     return MOCK_SURVEY
   }
 
-  const { data, error } = await supabase!
-    .from('surveys')
-    .select('*')
-    .eq('id', id)
-    .single()
+  // If called with the mock ID, fetch the first survey from DB instead
+  const query = (id === MOCK_SURVEY.id)
+    ? supabase!.from('surveys').select('*').order('created_at').limit(1).single()
+    : supabase!.from('surveys').select('*').eq('id', id).single()
 
+  const { data, error } = await query
   if (error || !data) return null
   return data as Survey
+}
+
+export async function fetchFirstSurveyId(): Promise<string> {
+  if (!supabaseAvailable) return MOCK_SURVEY.id
+  const { data } = await supabase!.from('surveys').select('id').order('created_at').limit(1).single()
+  return data?.id ?? MOCK_SURVEY.id
 }
 
 // ─── Auth helpers ───────────────────────────────────────────────────────────

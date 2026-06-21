@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell,
 } from 'recharts'
-import { fetchAllResponses, fetchSurveyForAdmin, signOut } from '../../lib/db'
+import { fetchAllResponses, fetchSurveyForAdmin, fetchFirstSurveyId, signOut } from '../../lib/db'
 import { buildSingleResponseCSV, buildAggregateCSV, downloadCSV } from '../../lib/csv'
-import { MOCK_SURVEY } from '../../lib/mockData'
 import type { Survey, SurveyResponse, MultipleAnswer, SliderAnswer } from '../../types'
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
@@ -16,18 +15,18 @@ export function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
-  const surveyId = MOCK_SURVEY.id
-
   useEffect(() => {
-    void Promise.all([
-      fetchSurveyForAdmin(surveyId),
-      fetchAllResponses(surveyId),
-    ]).then(([s, r]) => {
+    void fetchFirstSurveyId().then((surveyId) =>
+      Promise.all([
+        fetchSurveyForAdmin(surveyId),
+        fetchAllResponses(surveyId),
+      ])
+    ).then(([s, r]) => {
       setSurvey(s)
       setResponses(r)
       setLoading(false)
     })
-  }, [surveyId])
+  }, [])
 
   async function handleLogout() {
     await signOut()
@@ -64,7 +63,7 @@ export function DashboardPage() {
             <button
               onClick={() => {
                 const csv = buildAggregateCSV(responses, survey)
-                downloadCSV(csv, `risposte_aggregate_${surveyId}.csv`)
+                downloadCSV(csv, `risposte_aggregate_${survey.id}.csv`)
               }}
               className="border border-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition"
             >
