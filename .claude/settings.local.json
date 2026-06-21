@@ -4,7 +4,18 @@
       "Bash(npm -v)",
       "Bash(git --version)",
       "Bash(npm create *)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(git rm *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Bash(gh auth *)",
+      "Bash(gh api *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Read(//Users/veronica/.ssh/**)",
+      "Bash(ssh -T git@github.com)"
     ]
   }
 }
