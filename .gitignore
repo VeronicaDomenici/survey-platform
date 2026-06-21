@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.local
+*.local
+
+# Video files – caricati su Supabase Storage, non nel repo
+videos/
+public/videos/
+.DS_Store
+.claude/
