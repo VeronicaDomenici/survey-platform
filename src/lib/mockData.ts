@@ -21,19 +21,18 @@ const SLIDER_OPTIONS = [
 ]
 
 // Each video: file id, URL-safe filename, display film title for Q1
+// Removed: intouchable, meet_the_parent
 const VIDEO_META: Array<{ id: string; filename: string; filmTitle: string; displayTitle: string }> = [
   { id: '10_cloverfield_lane',           filename: '10_cloverfield_lane',           filmTitle: '10 Cloverfield Lane',                        displayTitle: '10 Cloverfield Lane' },
   { id: '500_days_of_summer',            filename: '500_days_of_summer',            filmTitle: '500 Days of Summer',                         displayTitle: '500 Days of Summer' },
-  { id: 'extremely_loud_extremely_close',filename: 'extremely_loud_extremely_close', filmTitle: 'Extremely Loud & Incredibly Close',           displayTitle: 'Extremely Loud & Incredibly Close' },
-  { id: "hachi_a_dog´s_tale",       filename: "hachi_a_dog´s_tale",       filmTitle: "Hachi: A Dog's Tale",                         displayTitle: "Hachi: A Dog's Tale" },
+  { id: 'extremely_loud_extremely_close',filename: 'extremely_loud_extremely_close', filmTitle: 'Extrem laut und unglaublich nah',             displayTitle: 'Extrem laut und unglaublich nah' },
+  { id: "hachi_a_dog´s_tale",       filename: "hachi_a_dog´s_tale",       filmTitle: 'Hachiko – Eine wunderbare Freundschaft',      displayTitle: 'Hachiko – Eine wunderbare Freundschaft' },
   { id: 'i_tonya',                       filename: 'i_tonya',                       filmTitle: 'I, Tonya',                                   displayTitle: 'I, Tonya' },
-  { id: 'intouchable',                   filename: 'intouchable',                   filmTitle: 'Intouchables',                               displayTitle: 'Intouchables' },
   { id: 'jojo_rabbit',                   filename: 'jojo_rabbit',                   filmTitle: 'Jojo Rabbit',                                displayTitle: 'Jojo Rabbit' },
   { id: 'little_miss_sunshine_negative', filename: 'little_miss_sunshine_negative', filmTitle: 'Little Miss Sunshine',                       displayTitle: 'Little Miss Sunshine (Szene A)' },
   { id: 'little_miss_sunshine_positive', filename: 'little_miss_sunshine_positive', filmTitle: 'Little Miss Sunshine',                       displayTitle: 'Little Miss Sunshine (Szene B)' },
-  { id: 'meet_the_parent',               filename: 'meet_the_parent',               filmTitle: 'Meet the Parents',                           displayTitle: 'Meet the Parents' },
   { id: 'soul',                          filename: 'soul',                          filmTitle: 'Soul',                                       displayTitle: 'Soul' },
-  { id: 'up',                            filename: 'up',                            filmTitle: 'Up',                                         displayTitle: 'Up' },
+  { id: 'up',                            filename: 'up',                            filmTitle: 'Oben',                                       displayTitle: 'Oben' },
 ]
 
 function makeQuestions(videoId: string, filmTitle: string) {

@@ -14,8 +14,7 @@ export function ConsentStep({ consent, totalSteps, dispatch, onNext }: Props) {
       <ProgressBar current={0} total={totalSteps} />
 
       <div className="bg-white rounded-xl shadow-sm p-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Einwilligungserklärung</h2>
-
+        {/* No h2 title here — welcome line is the first visible element */}
         <div className="text-gray-700 space-y-4 text-sm leading-relaxed">
           <p className="text-base font-semibold text-justify">
             Liebe*r Teilnehmer*in, herzlichen Dank für Deine Bereitschaft an unserer Studie teilzunehmen.
@@ -41,31 +40,33 @@ export function ConsentStep({ consent, totalSteps, dispatch, onNext }: Props) {
             .
           </p>
 
-          <div>
-            <p className="underline font-medium mb-2">Einwilligungserklärung</p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>
-                Alle Informationen, die wir von Dir erhalten, werden gemäß dem Datenschutzgesetz
-                vollständig anonym behandelt.
-              </li>
-              <li>
-                Alle Angaben werden ausschließlich für wissenschaftliche Zwecke an dem Institut für
-                Klinische und Gesundheitspsychologie der Universität Wien aufbewahrt und ausgewertet.
-              </li>
-              <li>
-                Am Ende der Untersuchung werden alle personenbezogenen Daten gelöscht.
-              </li>
-              <li>
-                Es ist für uns im Folgenden wichtig, dass Du alle Fragen beantwortest. Es geht um
-                Deine persönliche Einschätzung und es gibt keine richtigen oder falschen Antworten.
-              </li>
-              <li>
-                Solltest Du aus irgendeinem Grund Deine Teilnahme an der Studie zurückziehen oder
-                beenden wollen, hat dies keine weiteren Folgen und alle Deine bereitgestellten
-                Informationen werden gelöscht.
-              </li>
-            </ul>
-          </div>
+          {/* "Einwilligungserklärung" — larger, with extra vertical spacing */}
+          <p className="text-base font-semibold underline pt-3 pb-1">
+            Einwilligungserklärung
+          </p>
+
+          <ul className="list-disc pl-6 space-y-2">
+            <li>
+              Alle Informationen, die wir von Dir erhalten, werden gemäß dem Datenschutzgesetz
+              vollständig anonym behandelt.
+            </li>
+            <li>
+              Alle Angaben werden ausschließlich für wissenschaftliche Zwecke an dem Institut für
+              Klinische und Gesundheitspsychologie der Universität Wien aufbewahrt und ausgewertet.
+            </li>
+            <li>
+              Am Ende der Untersuchung werden alle personenbezogenen Daten gelöscht.
+            </li>
+            <li>
+              Es ist für uns im Folgenden wichtig, dass Du alle Fragen beantwortest. Es geht um
+              Deine persönliche Einschätzung und es gibt keine richtigen oder falschen Antworten.
+            </li>
+            <li>
+              Solltest Du aus irgendeinem Grund Deine Teilnahme an der Studie zurückziehen oder
+              beenden wollen, hat dies keine weiteren Folgen und alle Deine bereitgestellten
+              Informationen werden gelöscht.
+            </li>
+          </ul>
 
           <p className="text-justify">
             Mit dem Ankreuzen von „Ich bin damit einverstanden" bestätigst Du die Einleitung gelesen
