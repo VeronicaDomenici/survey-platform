@@ -1,18 +1,16 @@
 import { useState } from 'react'
-import { ProgressBar } from '../../components/ProgressBar'
 import type { DemographicsField } from '../../types'
 import type { SurveyAction } from '../../reducers/surveyReducer'
 
 interface Props {
   fields: DemographicsField[]
   values: Record<string, string>
-  totalSteps: number
   dispatch: React.Dispatch<SurveyAction>
   onNext: () => void
   onBack: () => void
 }
 
-export function DemographicsStep({ fields, values, totalSteps, dispatch, onNext, onBack }: Props) {
+export function DemographicsStep({ fields, values, dispatch, onNext, onBack }: Props) {
   const [touched, setTouched] = useState<Record<string, boolean>>({})
 
   function validate() {
@@ -31,16 +29,13 @@ export function DemographicsStep({ fields, values, totalSteps, dispatch, onNext,
   function handleNext() {
     const allTouched = Object.fromEntries(fields.map((f) => [f.id, true]))
     setTouched(allTouched)
-    const errors = validate()
-    if (Object.keys(errors).length === 0) onNext()
+    if (Object.keys(validate()).length === 0) onNext()
   }
 
-  const errors = touched && Object.keys(touched).length > 0 ? validate() : {}
+  const errors = Object.keys(touched).length > 0 ? validate() : {}
 
   return (
     <div className="max-w-2xl mx-auto">
-      <ProgressBar current={1} total={totalSteps} />
-
       <div className="bg-white rounded-xl shadow-sm p-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">Soziodemografische Angaben</h2>
         <p className="text-sm text-gray-500 mb-6">
@@ -93,17 +88,10 @@ export function DemographicsStep({ fields, values, totalSteps, dispatch, onNext,
         </div>
 
         <div className="flex justify-between mt-8">
-          <button
-            onClick={onBack}
-            className="text-gray-500 hover:text-gray-700 px-4 py-2 rounded-lg transition"
-          >
+          <button onClick={onBack} className="text-gray-500 hover:text-gray-700 px-4 py-2 rounded-lg transition">
             ← Zurück
           </button>
-          <button
-            onClick={handleNext}
-            className="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium
-              hover:bg-blue-700 transition"
-          >
+          <button onClick={handleNext} className="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition">
             Weiter →
           </button>
         </div>

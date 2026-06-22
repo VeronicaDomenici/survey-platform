@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { ProgressBar } from '../../components/ProgressBar'
 import type { VideoConfig, QuestionAnswer, MultipleAnswer, SliderAnswer } from '../../types'
 import type { SurveyAction } from '../../reducers/surveyReducer'
 
@@ -7,8 +6,6 @@ interface Props {
   video: VideoConfig
   videoIndex: number
   totalVideos: number
-  stepIndex: number
-  totalSteps: number
   answers: Record<string, QuestionAnswer>
   dispatch: React.Dispatch<SurveyAction>
   onNext: () => void
@@ -16,10 +13,12 @@ interface Props {
 }
 
 export function VideoStep({
-  video, videoIndex, totalVideos, stepIndex, totalSteps,
+  video, videoIndex, totalVideos,
   answers, dispatch, onNext, onBack,
 }: Props) {
   const [validationError, setValidationError] = useState(false)
+  const [hasPlayed, setHasPlayed] = useState(false)
+  const [playError, setPlayError] = useState(false)
 
   function setAnswer(questionId: string, answer: QuestionAnswer) {
     dispatch({ type: 'SET_ANSWER', videoId: video.id, questionId, answer })
@@ -39,6 +38,8 @@ export function VideoStep({
   }
 
   function handleNext() {
+    if (!hasPlayed) { setPlayError(true); return }
+    setPlayError(false)
     if (!validate()) { setValidationError(true); return }
     setValidationError(false)
     onNext()
@@ -46,8 +47,6 @@ export function VideoStep({
 
   return (
     <div className="max-w-3xl mx-auto">
-      <ProgressBar current={stepIndex} total={totalSteps} />
-
       {/* Section header — shown only on first video */}
       {videoIndex === 0 && (
         <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-4">
@@ -75,6 +74,7 @@ export function VideoStep({
             src={video.storage_url}
             controls
             className="w-full rounded-lg bg-black"
+            onPlay={() => { setHasPlayed(true); setPlayError(false) }}
             onError={(e) => {
               const el = e.currentTarget
               el.style.display = 'none'
@@ -208,7 +208,12 @@ export function VideoStep({
           })}
         </div>
 
-        {validationError && (
+        {playError && (
+          <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+            ▶ Bitte schaue dir zunächst das Video an, bevor du die Fragen beantwortest.
+          </div>
+        )}
+        {validationError && !playError && (
           <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
             Bitte beantworte alle Fragen, bevor du weitermachst.
           </div>

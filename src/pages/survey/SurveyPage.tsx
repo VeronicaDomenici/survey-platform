@@ -11,15 +11,37 @@ import type { Survey } from '../../types'
 
 const RETRY_DELAYS = [1000, 3000, 8000]
 
-function Layout({ children }: { children: React.ReactNode }) {
+function Layout({ children, step, totalSteps }: {
+  children: React.ReactNode
+  step: number
+  totalSteps: number
+}) {
+  const pct = totalSteps > 0 ? Math.round((step / totalSteps) * 100) : 0
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 mb-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex justify-center">
-          <img src="/logo.png" alt="EMOVIE" className="h-14 w-auto" />
+          <img src="/logo.png" alt="EMOVIE" className="h-20 w-auto" />
         </div>
       </header>
-      <main className="px-4 pb-12">{children}</main>
+
+      <main className="flex-1 px-4 py-8">{children}</main>
+
+      {/* Progress bar — fixed at the bottom */}
+      <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-3">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex justify-between text-xs text-gray-400 mb-1">
+            <span>Fortschritt</span>
+            <span>{pct}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -163,7 +185,7 @@ export function SurveyPage() {
   // ─── Thank you ──────────────────────────────────────────────────────────────
   if (state.submitted || step >= totalSteps) {
     return (
-      <Layout>
+      <Layout step={step} totalSteps={totalSteps}>
         <ThankYouStep />
       </Layout>
     )
@@ -172,10 +194,9 @@ export function SurveyPage() {
   // ─── Consent ────────────────────────────────────────────────────────────────
   if (step === 0) {
     return (
-      <Layout>
+      <Layout step={step} totalSteps={totalSteps}>
         <ConsentStep
           consent={state.consent}
-          totalSteps={totalSteps}
           dispatch={dispatch}
           onNext={() => pushStep(1)}
         />
@@ -186,11 +207,10 @@ export function SurveyPage() {
   // ─── Demographics ───────────────────────────────────────────────────────────
   if (step === 1) {
     return (
-      <Layout>
+      <Layout step={step} totalSteps={totalSteps}>
         <DemographicsStep
           fields={surveyData.demographics_fields}
           values={state.demographics}
-          totalSteps={totalSteps}
           dispatch={dispatch}
           onNext={() => pushStep(2)}
           onBack={() => pushStep(0)}
@@ -212,13 +232,11 @@ export function SurveyPage() {
   const isLastVideo = videoIndex === orderedVideos.length - 1
 
   return (
-    <Layout>
+    <Layout step={step} totalSteps={totalSteps}>
       <VideoStep
         video={video}
         videoIndex={videoIndex}
         totalVideos={orderedVideos.length}
-        stepIndex={step}
-        totalSteps={totalSteps}
         answers={state.videoAnswers[video.id] ?? {}}
         dispatch={dispatch}
         onBack={() => pushStep(step - 1)}
