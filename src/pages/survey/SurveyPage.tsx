@@ -11,13 +11,12 @@ import type { Survey } from '../../types'
 
 const RETRY_DELAYS = [1000, 3000, 8000]
 
-function Layout({ title, children }: { title: string; children: React.ReactNode }) {
+function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-3 mb-6">
-        <div className="max-w-3xl mx-auto flex items-center gap-4">
-          <img src="/logo.svg" alt="EMOVIE" className="h-10 w-auto shrink-0" />
-          <h1 className="text-base font-semibold text-gray-600">{title}</h1>
+      <header className="bg-white border-b border-gray-200 px-6 py-4 mb-6">
+        <div className="flex justify-center">
+          <img src="/logo.png" alt="EMOVIE" className="h-14 w-auto" />
         </div>
       </header>
       <main className="px-4 pb-12">{children}</main>
@@ -164,7 +163,7 @@ export function SurveyPage() {
   // ─── Thank you ──────────────────────────────────────────────────────────────
   if (state.submitted || step >= totalSteps) {
     return (
-      <Layout title={surveyData.title}>
+      <Layout>
         <ThankYouStep />
       </Layout>
     )
@@ -173,7 +172,7 @@ export function SurveyPage() {
   // ─── Consent ────────────────────────────────────────────────────────────────
   if (step === 0) {
     return (
-      <Layout title={surveyData.title}>
+      <Layout>
         <ConsentStep
           consent={state.consent}
           totalSteps={totalSteps}
@@ -187,7 +186,7 @@ export function SurveyPage() {
   // ─── Demographics ───────────────────────────────────────────────────────────
   if (step === 1) {
     return (
-      <Layout title={surveyData.title}>
+      <Layout>
         <DemographicsStep
           fields={surveyData.demographics_fields}
           values={state.demographics}
@@ -213,7 +212,7 @@ export function SurveyPage() {
   const isLastVideo = videoIndex === orderedVideos.length - 1
 
   return (
-    <Layout title={surveyData.title}>
+    <Layout>
       <VideoStep
         video={video}
         videoIndex={videoIndex}
