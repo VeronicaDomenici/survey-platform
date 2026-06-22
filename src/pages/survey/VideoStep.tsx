@@ -54,7 +54,7 @@ export function VideoStep({
       <div className="bg-white rounded-xl shadow-sm p-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-800">{video.title}</h2>
-          <span className="text-sm text-gray-400">Video {videoIndex + 1} di {totalVideos}</span>
+          <span className="text-sm text-gray-400">Video {videoIndex + 1} von {totalVideos}</span>
         </div>
 
         {/* Video player */}
@@ -70,7 +70,7 @@ export function VideoStep({
             }}
           />
           <div className="hidden bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
-            Video non disponibile: <code>{video.storage_url}</code>
+            Video nicht verfügbar: <code>{video.storage_url}</code>
           </div>
         </div>
 
@@ -193,7 +193,7 @@ export function VideoStep({
 
         {validationError && (
           <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
-            {validationError}
+            Bitte beantworte alle Fragen, bevor du weitermachst.
           </div>
         )}
 
@@ -202,14 +202,14 @@ export function VideoStep({
             onClick={onBack}
             className="text-gray-500 hover:text-gray-700 px-4 py-2 rounded-lg transition"
           >
-            ← Indietro
+            ← Zurück
           </button>
           <button
             onClick={handleNext}
             className="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium
               hover:bg-blue-700 transition"
           >
-            {videoIndex === totalVideos - 1 ? 'Termina →' : 'Avanti →'}
+            {videoIndex === totalVideos - 1 ? 'Abschließen →' : 'Weiter →'}
           </button>
         </div>
       </div>

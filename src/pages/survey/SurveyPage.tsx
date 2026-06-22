@@ -96,13 +96,13 @@ export function SurveyPage() {
       if (delay !== undefined) {
         dispatch({
           type: 'SET_SUBMIT_ERROR',
-          error: `Errore di rete. Riprovo tra ${delay / 1000}s… (tentativo ${retryIndex + 1}/3)`,
+          error: `Netzwerkfehler. Erneuter Versuch in ${delay / 1000}s… (Versuch ${retryIndex + 1}/3)`,
         })
         setTimeout(() => void submit(retryIndex + 1), delay)
       } else {
         dispatch({
           type: 'SET_SUBMIT_ERROR',
-          error: 'Invio fallito dopo 3 tentativi. I tuoi dati sono salvati in locale. Premi "Riprova" quando sei connesso.',
+          error: 'Übermittlung nach 3 Versuchen fehlgeschlagen. Deine Daten sind lokal gespeichert. Drücke „Erneut versuchen", wenn du wieder online bist.',
         })
       }
     }
@@ -112,7 +112,7 @@ export function SurveyPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-400">Caricamento questionario…</p>
+        <p className="text-gray-400">Fragebogen wird geladen…</p>
       </div>
     )
   }
@@ -121,12 +121,12 @@ export function SurveyPage() {
     return (
       <div className="min-h-screen flex items-center justify-center p-6">
         <div className="bg-white rounded-xl shadow p-8 max-w-md text-center">
-          <p className="text-red-600 mb-4">{fetchError ?? 'Questionario non disponibile.'}</p>
+          <p className="text-red-600 mb-4">{fetchError ?? 'Fragebogen nicht verfügbar.'}</p>
           <button
             onClick={() => window.location.reload()}
             className="bg-blue-600 text-white px-5 py-2 rounded-lg"
           >
-            Riprova
+            Erneut versuchen
           </button>
         </div>
       </div>
@@ -137,7 +137,7 @@ export function SurveyPage() {
     return (
       <div className="min-h-screen flex items-center justify-center p-6">
         <div className="bg-white rounded-xl shadow p-8 max-w-md text-center">
-          <p className="text-yellow-700">Nessun video configurato per questo questionario.</p>
+          <p className="text-yellow-700">Keine Videos für diesen Fragebogen konfiguriert.</p>
         </div>
       </div>
     )
@@ -222,13 +222,13 @@ export function SurveyPage() {
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700
             flex items-center justify-between">
             <span>{state.submitError}</span>
-            {!state.submitError.includes('Riprovo') && (
+            {!state.submitError.includes('Erneut') && (
               <button
                 onClick={() => void submit()}
                 className="ml-4 bg-red-600 text-white px-4 py-1.5 rounded-lg text-xs
                   hover:bg-red-700 shrink-0"
               >
-                Riprova
+                Erneut versuchen
               </button>
             )}
           </div>

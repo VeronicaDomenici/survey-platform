@@ -19,7 +19,7 @@ export function DemographicsStep({ fields, values, totalSteps, dispatch, onNext,
     const errors: Record<string, string> = {}
     for (const field of fields) {
       if (field.required && !values[field.id]?.trim()) {
-        errors[field.id] = 'Campo obbligatorio'
+        errors[field.id] = 'Pflichtfeld'
       }
     }
     return errors
@@ -39,7 +39,10 @@ export function DemographicsStep({ fields, values, totalSteps, dispatch, onNext,
       <ProgressBar current={1} total={totalSteps} />
 
       <div className="bg-white rounded-xl shadow-sm p-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Dati anagrafici</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">Soziodemografische Angaben</h2>
+        <p className="text-sm text-gray-500 mb-6">
+          In diesem Abschnitt werden Dir Fragen zu Deinem soziodemografischen Hintergrund gestellt.
+        </p>
 
         <div className="space-y-5">
           {fields.map((field) => (
@@ -59,7 +62,7 @@ export function DemographicsStep({ fields, values, totalSteps, dispatch, onNext,
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm
                     focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">— Seleziona —</option>
+                  <option value="">— Bitte wählen —</option>
                   {(field.options ?? []).map((opt) => (
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
@@ -89,14 +92,14 @@ export function DemographicsStep({ fields, values, totalSteps, dispatch, onNext,
             onClick={onBack}
             className="text-gray-500 hover:text-gray-700 px-4 py-2 rounded-lg transition"
           >
-            ← Indietro
+            ← Zurück
           </button>
           <button
             onClick={handleNext}
             className="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium
               hover:bg-blue-700 transition"
           >
-            Avanti →
+            Weiter →
           </button>
         </div>
       </div>
