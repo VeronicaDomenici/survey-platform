@@ -62,6 +62,7 @@ export interface SurveyState {
   consent: boolean
   demographics: Record<string, string>
   videoAnswers: Record<string, VideoAnswers>  // videoId → answers
+  videoOrder: string[]  // shuffled video IDs, fixed per session
   submitted: boolean
   submitError: string | null
 }

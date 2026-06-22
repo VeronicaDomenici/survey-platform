@@ -7,7 +7,7 @@ interface Props {
   video: VideoConfig
   videoIndex: number
   totalVideos: number
-  stepIndex: number     // for progress bar (step 2 = first video)
+  stepIndex: number
   totalSteps: number
   answers: Record<string, QuestionAnswer>
   dispatch: React.Dispatch<SurveyAction>
@@ -19,31 +19,28 @@ export function VideoStep({
   video, videoIndex, totalVideos, stepIndex, totalSteps,
   answers, dispatch, onNext, onBack,
 }: Props) {
-  const [validationError, setValidationError] = useState<string | null>(null)
+  const [validationError, setValidationError] = useState(false)
 
   function setAnswer(questionId: string, answer: QuestionAnswer) {
     dispatch({ type: 'SET_ANSWER', videoId: video.id, questionId, answer })
   }
 
-  function validate(): string | null {
+  function validate(): boolean {
     for (const q of video.questions) {
       const ans = answers[q.id]
-      if (q.type === 'single' && !ans) return `Rispondi alla domanda: "${q.text}"`
-      if (q.type === 'multiple' && (!(ans as MultipleAnswer)?.length))
-        return `Seleziona almeno un'opzione per: "${q.text}"`
+      if (q.type === 'single' && !ans) return false
+      if (q.type === 'multiple' && !(ans as MultipleAnswer)?.length) return false
       if (q.type === 'multiple_slider') {
-        const selected = ans as SliderAnswer | undefined
-        if (!selected || Object.keys(selected).length === 0)
-          return `Seleziona almeno un'opzione per: "${q.text}"`
+        const s = ans as SliderAnswer | undefined
+        if (!s || Object.keys(s).length === 0) return false
       }
     }
-    return null
+    return true
   }
 
   function handleNext() {
-    const err = validate()
-    if (err) { setValidationError(err); return }
-    setValidationError(null)
+    if (!validate()) { setValidationError(true); return }
+    setValidationError(false)
     onNext()
   }
 
@@ -51,9 +48,24 @@ export function VideoStep({
     <div className="max-w-3xl mx-auto">
       <ProgressBar current={stepIndex} total={totalSteps} />
 
+      {/* Section header — shown only on first video */}
+      {videoIndex === 0 && (
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-4">
+          <h2 className="text-lg font-semibold text-blue-800 mb-1">
+            Emotionale Bewertung von Filmszenen
+          </h2>
+          <p className="text-sm text-blue-700">
+            In diesem Abschnitt siehst du einige kurze Szenen aus verschiedenen Filmen. Nach jeder
+            Szene wirst du gebeten, anzugeben, welche Emotionen du dabei empfunden hast. Du kannst
+            eine oder mehrere Emotionen auswählen und anschließend deren Intensität auf einer Skala
+            von 0 bis 10 bewerten.
+          </p>
+        </div>
+      )}
+
       <div className="bg-white rounded-xl shadow-sm p-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-800">{video.title}</h2>
+          <h3 className="text-xl font-bold text-gray-800">{video.title}</h3>
           <span className="text-sm text-gray-400">Video {videoIndex + 1} von {totalVideos}</span>
         </div>
 
@@ -66,7 +78,8 @@ export function VideoStep({
             onError={(e) => {
               const el = e.currentTarget
               el.style.display = 'none'
-              el.nextElementSibling?.classList.remove('hidden')
+              const next = el.nextElementSibling as HTMLElement | null
+              if (next) next.classList.remove('hidden')
             }}
           />
           <div className="hidden bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
@@ -133,13 +146,13 @@ export function VideoStep({
                   </div>
                 )}
 
-                {/* Multiple with slider */}
+                {/* Multiple with slider 0–10 */}
                 {question.type === 'multiple_slider' && (
                   <div className="space-y-3">
                     {question.options.map((opt) => {
                       const sliders = (ans as SliderAnswer | undefined) ?? {}
                       const isChecked = opt.id in sliders
-                      const sliderVal = sliders[opt.id] ?? 0.5
+                      const sliderVal = sliders[opt.id] ?? 5
 
                       return (
                         <div key={opt.id}
@@ -153,7 +166,7 @@ export function VideoStep({
                                 if (isChecked) {
                                   delete next[opt.id]
                                 } else {
-                                  next[opt.id] = 0.5
+                                  next[opt.id] = 5
                                 }
                                 setAnswer(question.id, next)
                               }}
@@ -163,22 +176,26 @@ export function VideoStep({
                           </label>
 
                           {isChecked && (
-                            <div className="flex items-center gap-4 ml-7">
-                              <input
-                                type="range"
-                                min={0} max={1} step={0.01}
-                                value={sliderVal}
-                                onChange={(e) => {
-                                  setAnswer(question.id, {
-                                    ...sliders,
-                                    [opt.id]: parseFloat(e.target.value),
-                                  })
-                                }}
-                                className="flex-1 h-2 accent-blue-600"
-                              />
-                              <span className="text-sm text-blue-700 font-mono w-10 text-right">
-                                {sliderVal.toFixed(2)}
-                              </span>
+                            <div className="ml-7">
+                              <div className="flex items-center gap-3">
+                                <span className="text-xs text-gray-400 w-4">0</span>
+                                <input
+                                  type="range"
+                                  min={0} max={10} step={1}
+                                  value={sliderVal}
+                                  onChange={(e) => {
+                                    setAnswer(question.id, {
+                                      ...sliders,
+                                      [opt.id]: parseInt(e.target.value, 10),
+                                    })
+                                  }}
+                                  className="flex-1 h-2 accent-blue-600"
+                                />
+                                <span className="text-xs text-gray-400 w-4 text-right">10</span>
+                                <span className="text-sm text-blue-700 font-mono w-6 text-center">
+                                  {sliderVal}
+                                </span>
+                              </div>
                             </div>
                           )}
                         </div>

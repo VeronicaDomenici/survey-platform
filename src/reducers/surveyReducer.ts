@@ -5,6 +5,7 @@ export type SurveyAction =
   | { type: 'SET_DEMOGRAPHICS'; key: string; value: string }
   | { type: 'SET_ANSWER'; videoId: string; questionId: string; answer: QuestionAnswer }
   | { type: 'GO_TO_STEP'; step: number }
+  | { type: 'SET_VIDEO_ORDER'; videoOrder: string[] }
   | { type: 'SET_SUBMITTED'; submitted: boolean }
   | { type: 'SET_SUBMIT_ERROR'; error: string | null }
   | { type: 'HYDRATE'; state: SurveyState }
@@ -36,6 +37,9 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
 
     case 'GO_TO_STEP':
       return { ...state, step: action.step }
+
+    case 'SET_VIDEO_ORDER':
+      return { ...state, videoOrder: action.videoOrder }
 
     case 'SET_SUBMITTED':
       return { ...state, submitted: action.submitted, submitError: null }

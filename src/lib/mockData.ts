@@ -4,18 +4,20 @@ const R2_BASE = 'https://pub-69c2fe31a3bd4ec98bd6fe04be7f4d13.r2.dev'
 
 const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Partecipando a questa ricerca accetti che i tuoi dati vengano utilizzati in forma anonima per scopi scientifici. Le tue risposte saranno trattate con la massima riservatezza.'
 
-// 10 emotion options for the slider question (Q3)
+// 12 emotion options for the slider question (Q3), scale 0–10
 const SLIDER_OPTIONS = [
-  { id: 'freude',        label: 'Freude' },
-  { id: 'traurigkeit',   label: 'Traurigkeit' },
-  { id: 'angst',         label: 'Angst' },
-  { id: 'wut',           label: 'Wut' },
-  { id: 'ueberraschung', label: 'Überraschung' },
-  { id: 'ekel',          label: 'Ekel' },
-  { id: 'zaertlichkeit', label: 'Zärtlichkeit' },
-  { id: 'bewunderung',   label: 'Bewunderung' },
-  { id: 'melancholie',   label: 'Melancholie' },
-  { id: 'aufregung',     label: 'Aufregung' },
+  { id: 'admiration',  label: 'Admiration' },
+  { id: 'amusement',   label: 'Amusement' },
+  { id: 'joy',         label: 'Joy' },
+  { id: 'relief',      label: 'Relief' },
+  { id: 'tenderness',  label: 'Tenderness' },
+  { id: 'compassion',  label: 'Compassion' },
+  { id: 'surprise',    label: 'Surprise' },
+  { id: 'agitation',   label: 'Agitation' },
+  { id: 'disgust',     label: 'Disgust' },
+  { id: 'fear',        label: 'Fear' },
+  { id: 'anger',       label: 'Anger' },
+  { id: 'sadness',     label: 'Sadness' },
 ]
 
 // Each video: file id, URL-safe filename, display film title for Q1
@@ -47,10 +49,10 @@ function makeQuestions(videoId: string, filmTitle: string) {
       ],
     },
     // Q2 removed — jump straight to slider
-    // Q3 — multiple choice with slider (10 emotions)
+    // Q3 — multiple choice with slider 0–10 (12 emotions)
     {
       id: `${videoId}_q3`,
-      text: 'Welche Emotionen hast du beim Anschauen dieser Szene empfunden? Gib bitte für jede ausgewählte Emotion die Intensität an (0 = gar nicht, 1 = sehr stark).',
+      text: 'Welche Emotionen hast du beim Anschauen dieser Szene empfunden? Gib bitte für jede ausgewählte Emotion die Intensität an (0 = gar nicht, 10 = sehr stark).',
       type: 'multiple_slider' as const,
       options: SLIDER_OPTIONS,
     },

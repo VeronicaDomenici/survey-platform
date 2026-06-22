@@ -34,6 +34,8 @@ export function SurveyPage() {
   const [surveyData, setSurveyData] = useState<Survey | null>(null)
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState<string | null>(null)
+  // orderedVideos: survey videos sorted by the session's randomised order
+  const [orderedVideos, setOrderedVideos] = useState<Survey['videos']>([])
   // Persist to localStorage on every state change
   useEffect(() => {
     saveState(state)
@@ -65,9 +67,19 @@ export function SurveyPage() {
       const data = await fetchPublishedSurvey(surveyId)
       if (cancelled) return
       if (!data) {
-        setFetchError('Questionario non trovato o non pubblicato.')
+        setFetchError('Fragebogen nicht gefunden oder nicht veröffentlicht.')
       } else {
         setSurveyData(data)
+        // Build ordered video list: reuse persisted shuffle or create new one
+        const existing = loadState(surveyId)
+        if (existing?.videoOrder?.length) {
+          const videoMap = Object.fromEntries(data.videos.map((v) => [v.id, v]))
+          setOrderedVideos(existing.videoOrder.flatMap((id) => (videoMap[id] ? [videoMap[id]!] : [])))
+        } else {
+          const shuffled = [...data.videos].sort(() => Math.random() - 0.5)
+          setOrderedVideos(shuffled)
+          dispatch({ type: 'SET_VIDEO_ORDER', videoOrder: shuffled.map((v) => v.id) })
+        }
       }
       setLoading(false)
     }
@@ -89,7 +101,7 @@ export function SurveyPage() {
         completed: true,
       })
       dispatch({ type: 'SET_SUBMITTED', submitted: true })
-      const totalSteps = 2 + surveyData.videos.length
+      const totalSteps = 2 + orderedVideos.length
       pushStep(totalSteps)
     } catch {
       const delay = RETRY_DELAYS[retryIndex]
@@ -133,7 +145,7 @@ export function SurveyPage() {
     )
   }
 
-  if (surveyData.videos.length === 0) {
+  if (orderedVideos.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6">
         <div className="bg-white rounded-xl shadow p-8 max-w-md text-center">
@@ -143,7 +155,7 @@ export function SurveyPage() {
     )
   }
 
-  const totalSteps = 2 + surveyData.videos.length
+  const totalSteps = 2 + orderedVideos.length
   const { step } = state
 
   // ─── Thank you ──────────────────────────────────────────────────────────────
@@ -160,7 +172,6 @@ export function SurveyPage() {
     return (
       <Layout title={surveyData.title}>
         <ConsentStep
-          introText={surveyData.intro_text}
           consent={state.consent}
           totalSteps={totalSteps}
           dispatch={dispatch}
@@ -188,7 +199,7 @@ export function SurveyPage() {
 
   // ─── Video steps ────────────────────────────────────────────────────────────
   const videoIndex = step - 2
-  const video = surveyData.videos[videoIndex]
+  const video = orderedVideos[videoIndex]
 
   if (!video) {
     // Step out of range – mark as submitted
@@ -196,14 +207,14 @@ export function SurveyPage() {
     return null
   }
 
-  const isLastVideo = videoIndex === surveyData.videos.length - 1
+  const isLastVideo = videoIndex === orderedVideos.length - 1
 
   return (
     <Layout title={surveyData.title}>
       <VideoStep
         video={video}
         videoIndex={videoIndex}
-        totalVideos={surveyData.videos.length}
+        totalVideos={orderedVideos.length}
         stepIndex={step}
         totalSteps={totalSteps}
         answers={state.videoAnswers[video.id] ?? {}}
