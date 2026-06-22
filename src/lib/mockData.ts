@@ -59,7 +59,7 @@ function makeQuestions(videoId: string, filmTitle: string) {
 
 export const MOCK_SURVEY: Survey = {
   id: 'mock-survey-1',
-  title: 'Emotionen im Film – Fragebogen',
+  title: 'EMOVIE: Bewertung emotionaler Filmszenen',
   intro_text: LOREM,
   demographics_fields: [
     {

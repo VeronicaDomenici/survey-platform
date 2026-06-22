@@ -20,6 +20,9 @@ export function DemographicsStep({ fields, values, totalSteps, dispatch, onNext,
     for (const field of fields) {
       if (field.required && !values[field.id]?.trim()) {
         errors[field.id] = 'Pflichtfeld'
+      } else if (field.id === 'age') {
+        const n = Number(values[field.id])
+        if (isNaN(n) || n < 10 || n > 99) errors[field.id] = 'Bitte ein Alter zwischen 10 und 99 angeben.'
       }
     }
     return errors
@@ -71,6 +74,8 @@ export function DemographicsStep({ fields, values, totalSteps, dispatch, onNext,
                 <input
                   type={field.type === 'number' ? 'number' : 'text'}
                   value={values[field.id] ?? ''}
+                  min={field.id === 'age' ? 10 : undefined}
+                  max={field.id === 'age' ? 99 : undefined}
                   onChange={(e) => {
                     dispatch({ type: 'SET_DEMOGRAPHICS', key: field.id, value: e.target.value })
                     setTouched((t) => ({ ...t, [field.id]: true }))

@@ -9,7 +9,7 @@ export function ProgressBar({ current, total }: Props) {
   return (
     <div className="w-full mb-8">
       <div className="flex justify-between text-xs text-gray-500 mb-1">
-        <span>Progresso</span>
+        <span>Fortschritt</span>
         <span>{pct}%</span>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-2">
