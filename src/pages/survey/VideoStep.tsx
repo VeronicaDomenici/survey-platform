@@ -149,10 +149,11 @@ export function VideoStep({
                 {/* Multiple with slider 0–10 */}
                 {question.type === 'multiple_slider' && (
                   <div className="space-y-3">
-                    {question.options.map((opt) => {
+                    {question.options.filter((opt) => opt.id !== 'no_emotion').map((opt) => {
                       const sliders = (ans as SliderAnswer | undefined) ?? {}
                       const isChecked = opt.id in sliders
                       const sliderVal = sliders[opt.id] ?? 5
+                      const noEmotionSelected = 'no_emotion' in sliders
 
                       return (
                         <div key={opt.id}
@@ -161,18 +162,22 @@ export function VideoStep({
                             <input
                               type="checkbox"
                               checked={isChecked}
+                              disabled={noEmotionSelected}
                               onChange={() => {
                                 const next = { ...sliders }
                                 if (isChecked) {
                                   delete next[opt.id]
                                 } else {
+                                  delete next['no_emotion']
                                   next[opt.id] = 5
                                 }
                                 setAnswer(question.id, next)
                               }}
-                              className="h-4 w-4 rounded text-blue-600"
+                              className="h-4 w-4 rounded text-blue-600 disabled:opacity-40"
                             />
-                            <span className="text-sm font-medium text-gray-700">{opt.label}</span>
+                            <span className={`text-sm font-medium ${noEmotionSelected ? 'text-gray-400' : 'text-gray-700'}`}>
+                              {opt.label}
+                            </span>
                           </label>
 
                           {isChecked && (
@@ -201,6 +206,37 @@ export function VideoStep({
                         </div>
                       )
                     })}
+
+                    {/* "Keine Emotion" — mutually exclusive with the 12 emotions */}
+                    {question.options.some((opt) => opt.id === 'no_emotion') && (() => {
+                      const sliders = (ans as SliderAnswer | undefined) ?? {}
+                      const isChecked = 'no_emotion' in sliders
+                      const hasEmotions = Object.keys(sliders).some((k) => k !== 'no_emotion')
+                      return (
+                        <div className="border-t border-gray-200 pt-3 mt-1">
+                          <label className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              disabled={hasEmotions}
+                              onChange={() => {
+                                if (isChecked) {
+                                  const next = { ...sliders }
+                                  delete next['no_emotion']
+                                  setAnswer(question.id, next)
+                                } else {
+                                  setAnswer(question.id, { no_emotion: 1 })
+                                }
+                              }}
+                              className="h-4 w-4 rounded text-gray-500 disabled:opacity-40"
+                            />
+                            <span className={`text-sm italic ${hasEmotions ? 'text-gray-400' : 'text-gray-600'}`}>
+                              Ich habe keine Emotion empfunden
+                            </span>
+                          </label>
+                        </div>
+                      )
+                    })()}
                   </div>
                 )}
               </div>

@@ -126,19 +126,22 @@ export function DashboardPage() {
               }
 
               if (question.type === 'multiple_slider') {
+                const emotionOpts = question.options.filter((o) => o.id !== 'no_emotion')
                 const sums: Record<string, number> = {}
                 const cnts: Record<string, number> = {}
-                for (const opt of question.options) { sums[opt.id] = 0; cnts[opt.id] = 0 }
+                for (const opt of emotionOpts) { sums[opt.id] = 0; cnts[opt.id] = 0 }
+                let noEmotionCount = 0
 
                 for (const resp of responses) {
                   const ans = resp.answers[video.id]?.[question.id] as SliderAnswer | undefined
                   if (!ans) continue
+                  if ('no_emotion' in ans) { noEmotionCount++; continue }
                   for (const [id, val] of Object.entries(ans)) {
                     if (id in sums) { sums[id]! += val; cnts[id]!++ }
                   }
                 }
 
-                const chartData = question.options.map((opt) => ({
+                const chartData = emotionOpts.map((opt) => ({
                   name: opt.label,
                   media: cnts[opt.id] ? Math.round((sums[opt.id]! / cnts[opt.id]!) * 100) / 100 : 0,
                   risposte: cnts[opt.id] ?? 0,
@@ -147,13 +150,18 @@ export function DashboardPage() {
                 return (
                   <div key={question.id}>
                     <p className="text-sm font-medium text-gray-600 mb-3">
-                      {question.text} — <span className="font-normal text-gray-400">media intensità (0–1)</span>
+                      {question.text} — <span className="font-normal text-gray-400">media intensità (0–10)</span>
                     </p>
+                    {noEmotionCount > 0 && (
+                      <p className="text-xs text-gray-400 mb-3">
+                        {noEmotionCount} partecipante/i ha selezionato «Ich habe keine Emotion empfunden»
+                      </p>
+                    )}
                     <ResponsiveContainer width="100%" height={240}>
                       <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
                         <XAxis dataKey="name" tick={{ fontSize: 10 }} angle={-35} textAnchor="end" height={70} interval={0} />
-                        <YAxis domain={[0, 1]} tick={{ fontSize: 11 }} />
+                        <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} />
                         <Tooltip formatter={(v) => [v, 'Media']} />
                         <Bar dataKey="media" radius={[4, 4, 0, 0]}>
                           {chartData.map((_, i) => (

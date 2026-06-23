@@ -18,6 +18,7 @@ const SLIDER_OPTIONS = [
   { id: 'fear',        label: 'Angst' },
   { id: 'anger',       label: 'Wut' },
   { id: 'sadness',     label: 'Traurigkeit' },
+  { id: 'no_emotion',  label: 'Ich habe keine Emotion empfunden' },
 ]
 
 // Each video: file id, URL-safe filename, display film title for Q1
