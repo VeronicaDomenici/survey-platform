@@ -108,10 +108,10 @@ export function DashboardPage() {
                 return (
                   <div key={question.id}>
                     <p className="text-sm font-medium text-gray-600 mb-3">{question.text}</p>
-                    <ResponsiveContainer width="100%" height={180}>
+                    <ResponsiveContainer width="100%" height={240}>
                       <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                        <XAxis dataKey="name" tick={{ fontSize: 10 }} angle={-35} textAnchor="end" height={70} interval={0} />
                         <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
                         <Tooltip />
                         <Bar dataKey="valore" radius={[4, 4, 0, 0]}>
@@ -149,10 +149,10 @@ export function DashboardPage() {
                     <p className="text-sm font-medium text-gray-600 mb-3">
                       {question.text} — <span className="font-normal text-gray-400">media intensità (0–1)</span>
                     </p>
-                    <ResponsiveContainer width="100%" height={180}>
+                    <ResponsiveContainer width="100%" height={240}>
                       <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                        <XAxis dataKey="name" tick={{ fontSize: 10 }} angle={-35} textAnchor="end" height={70} interval={0} />
                         <YAxis domain={[0, 1]} tick={{ fontSize: 11 }} />
                         <Tooltip formatter={(v) => [v, 'Media']} />
                         <Bar dataKey="media" radius={[4, 4, 0, 0]}>
