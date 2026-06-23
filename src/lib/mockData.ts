@@ -6,18 +6,18 @@ const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Partecip
 
 // 12 emotion options for the slider question (Q3), scale 0–10
 const SLIDER_OPTIONS = [
-  { id: 'admiration',  label: 'Admiration' },
-  { id: 'amusement',   label: 'Amusement' },
-  { id: 'joy',         label: 'Joy' },
-  { id: 'relief',      label: 'Relief' },
-  { id: 'tenderness',  label: 'Tenderness' },
-  { id: 'compassion',  label: 'Compassion' },
-  { id: 'surprise',    label: 'Surprise' },
-  { id: 'agitation',   label: 'Agitation' },
-  { id: 'disgust',     label: 'Disgust' },
-  { id: 'fear',        label: 'Fear' },
-  { id: 'anger',       label: 'Anger' },
-  { id: 'sadness',     label: 'Sadness' },
+  { id: 'admiration',  label: 'Bewunderung' },
+  { id: 'amusement',   label: 'Belustigung' },
+  { id: 'joy',         label: 'Freude' },
+  { id: 'relief',      label: 'Erleichterung' },
+  { id: 'tenderness',  label: 'Zärtlichkeit' },
+  { id: 'compassion',  label: 'Mitgefühl' },
+  { id: 'surprise',    label: 'Überraschung' },
+  { id: 'agitation',   label: 'Aufgewühltheit' },
+  { id: 'disgust',     label: 'Ekel' },
+  { id: 'fear',        label: 'Angst' },
+  { id: 'anger',       label: 'Wut' },
+  { id: 'sadness',     label: 'Traurigkeit' },
 ]
 
 // Each video: file id, URL-safe filename, display film title for Q1
