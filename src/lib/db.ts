@@ -91,7 +91,7 @@ export async function upsertResponse(params: {
     { onConflict: 'session_token' },
   )
 
-  if (error) throw new Error(error.message)
+  if (error) throw new Error(`[${error.code ?? 'ERR'}] ${error.message}`)
 }
 
 export async function fetchAllResponses(surveyId: string): Promise<SurveyResponse[]> {

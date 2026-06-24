@@ -127,18 +127,19 @@ export function SurveyPage() {
       dispatch({ type: 'SET_SUBMITTED', submitted: true })
       const totalSteps = 2 + orderedVideos.length
       pushStep(totalSteps)
-    } catch {
+    } catch (err) {
+      const detail = err instanceof Error ? ` (${err.message})` : ''
       const delay = RETRY_DELAYS[retryIndex]
       if (delay !== undefined) {
         dispatch({
           type: 'SET_SUBMIT_ERROR',
-          error: `Netzwerkfehler. Erneuter Versuch in ${delay / 1000}s… (Versuch ${retryIndex + 1}/3)`,
+          error: `Netzwerkfehler. Erneuter Versuch in ${delay / 1000}s… (Versuch ${retryIndex + 1}/3)${detail}`,
         })
         setTimeout(() => void submit(retryIndex + 1), delay)
       } else {
         dispatch({
           type: 'SET_SUBMIT_ERROR',
-          error: 'Übermittlung nach 3 Versuchen fehlgeschlagen. Deine Daten sind lokal gespeichert. Drücke „Erneut versuchen", wenn du wieder online bist.',
+          error: `Übermittlung nach 3 Versuchen fehlgeschlagen. Deine Daten sind lokal gespeichert. Drücke „Erneut versuchen", wenn du wieder online bist.${detail}`,
         })
       }
     }
